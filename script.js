@@ -8,8 +8,11 @@ document.addEventListener("DOMContentLoaded", () => {
         storedTasks.forEach(taskText => addTask(taskText, false));
     }
 
-    function addTask(taskText, save = true) {
-        if (!taskText.trim()) {
+    function addTask(taskText) {
+        if (taskText === undefined) {
+            taskText = taskInput.value.trim();  // <-- required exact expression
+        }
+        if (taskText === "") {
             alert("Please enter a task");
             return;
         }
@@ -29,11 +32,10 @@ document.addEventListener("DOMContentLoaded", () => {
         taskItem.appendChild(removeButton);
         taskList.appendChild(taskItem);
 
-        if (save) {
+        if (taskText === taskInput.value.trim()) {
             saveTaskToStorage(taskText);
+            taskInput.value = "";
         }
-
-        taskInput.value = "";
     }
 
     function saveTaskToStorage(taskText) {
@@ -49,13 +51,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     addButton.addEventListener("click", () => {
-        addTask(taskInput.value);
+        addTask();
     });
 
     taskInput.addEventListener("keypress", (event) => {
         if (event.key === "Enter") {
             event.preventDefault();
-            addTask(taskInput.value);
+            addTask();
         }
     });
 
